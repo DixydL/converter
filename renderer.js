@@ -4,3 +4,15 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
+
+document.getElementById('dirs').addEventListener('click', (evt) => {
+    evt.preventDefault()
+    window.postMessage({
+        type: 'select-dirs',
+    })
+})
+
+ipcRenderer.on('sel-dir', (event, path) => {
+    console.log(path);
+    const message = `This app is located at: ${path}`
+})

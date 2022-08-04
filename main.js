@@ -1,5 +1,7 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, dialog, MessageChannelMain } = require('electron')
+const ipcMain = require('electron').ipcMain
+
 const path = require('path')
 require('electron-reload')(__dirname, {
   // Note that the path to electron may vary according to the main file
@@ -16,19 +18,30 @@ function createWindow() {
     }
   })
 
+  
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
+  // mainWindow.webContents.send( 'custom-endpoint', "xz" );
+
+  //const { port1, port2 } = new MessageChannelMain();
+
 
   ipcMain.on('select-dirs', async (event, arg) => {
     const result = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory']
     })
-    console.log("ds");
-    event.sender.send('sel-dir', result.filePaths);
+    //mainWindow.webContents.postMessage('main-world-port', "xz", [port1])
+
+    //mainWindow.webContents.postMessage('main-world-port', "xz", [port1])
+
+    mainWindow.webContents.send( 'custom-endpoint', result );
+
   })
 
+
+
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

@@ -4,6 +4,7 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
+// const { ipcMain } = require('electron/main');
 
 document.getElementById('dirs').addEventListener('click', (evt) => {
     evt.preventDefault()
@@ -12,7 +13,8 @@ document.getElementById('dirs').addEventListener('click', (evt) => {
     })
 })
 
-ipcRenderer.on('sel-dir', (event, path) => {
-    console.log(path);
-    const message = `This app is located at: ${path}`
-})
+window.api.handle('custom-endpoint', (event, data) => function (event, data) {
+    let dir = data.filePaths[0];
+    document.getElementById('video').textContent = dir;
+    console.log()
+}, event);

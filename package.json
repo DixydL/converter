@@ -2,9 +2,14 @@
   "name": "electron-quick-start",
   "version": "1.0.0",
   "description": "A minimal Electron application",
-  "main": "main.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "electron ."
+    "build": "./node_modules/.bin/tsc",
+    "start": "electron ./dist/app.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run build\"",
+    "test": "concurrently \"tsc -w\" \"electron .\""
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -17,9 +22,41 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^19.0.8"
+    "@electron-forge/cli": "^6.0.0-beta.65",
+    "electron": "^19.0.8",
+    "electron-builder": "^23.3.3",
+    "typescript": "^4.7.4"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-zip"
+        }
+      ]
+    }
+  },
+  "build": {
+    "appId": "converter",
+    "files": [
+      "./dist/**/*",
+      "./dist/../index.html",
+      "./dist/../renderer.js",
+      "./dist/../styles.css",
+      "./dist/../preload.js",
+      "./dist/index_A.html",
+      "./dist/index_B.html",
+      "./src/*.js"
+    ]
   },
   "dependencies": {
-    "electron-reload": "^2.0.0-alpha.1"
+    "@types/string-similarity": "^4.0.0",
+    "cloudconvert": "^2.3.0",
+    "concurrently": "^7.3.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "nodemon": "^2.0.19",
+    "string-similarity": "^4.0.4"
   }
 }

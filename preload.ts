@@ -4,6 +4,8 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 
 window.addEventListener('DOMContentLoaded', () => {
+  console.log("test4");
+
   const replaceText = (selector, text) => {
     const element = document.getElementById(selector)
     if (element) element.innerText = text
@@ -18,6 +20,12 @@ process.once('loaded', () => {
   window.addEventListener('message', evt => {
     if (evt.data.type === 'select-dirs') {
       ipcRenderer.send('select-dirs')
+    }
+    if (evt.data.type === 'converter') {
+      let video = document.getElementById('video').textContent;
+      let sound = document.getElementById('sound').textContent;
+      let sub = document.getElementById('sub').textContent;
+      ipcRenderer.send('converter', { video, sound, sub })
     }
   })
 })

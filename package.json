@@ -57,7 +57,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@types/string-similarity": "^4.0.0",
-    "cloudconvert": "^2.3.0",
+    "cloudconvert": "^2.3.1",
     "concurrently": "^7.3.0",
     "electron-reload": "^2.0.0-alpha.1",
     "fluent-ffmpeg": "^2.1.2",

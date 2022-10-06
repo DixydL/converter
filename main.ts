@@ -2,7 +2,7 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
 import * as path from 'path';
 import Finder from './src/find';
-import electronReload from 'electron-reload';
+//import electronReload from 'electron-reload';
 import stringSimilarity from "string-similarity";
 import { FilesConverter } from './src/types/files_convert';
 import { OnlineConverter } from './src/online-converter';
@@ -24,7 +24,7 @@ export default class Main {
 
   private static onReady() {
 
-    //electronReload(path.join(__dirname), { electron: path.join(__dirname, '/../', 'node_modules', '.bin', 'electron') });
+    //electronReload(path.join(__dirname), { electron: path.join(__dirname, '/../', 'node_modules', '.bin', 'electron.cmd') });
 
     Main.mainWindow = new Main.BrowserWindow({
       width: 800, height: 600, webPreferences: {
@@ -37,6 +37,7 @@ export default class Main {
     ipcMain.on('converter', async (event, arg: FilesConverter) => {
       const finder = new Finder();
       const onlineConverter = new OnlineConverter();
+      console.log(arg.sub);
       if (arg.sub == "null") {
         arg.sub = null;
       }
@@ -49,7 +50,17 @@ export default class Main {
 
       if (arg.sound) { mkvFiles = await finder.mergeMkv(arg.video, arg.sound) };
 
-      const file = await onlineConverter.run(mkvFiles, arg.sub);
+      onlineConverter.progress((procent) => {
+        Main.mainWindow.webContents.send('progress', `Завантажено: ${procent}%`);
+      });
+
+      onlineConverter.progressConverter((procent) => {
+        Main.mainWindow.webContents.send('progress', `Прогрес конвертації: ${procent}%`);
+      });
+
+      const dir = path.dirname(arg.video);
+
+      const file = await onlineConverter.run(mkvFiles, dir, arg.sub);
 
       console.log(mkvFiles);
       Main.mainWindow.webContents.send('finish', file);
@@ -105,7 +116,7 @@ export default class Main {
 
     })
 
-    Main.mainWindow.webContents.openDevTools();
+    //Main.mainWindow.webContents.openDevTools();
     Main.mainWindow.on('closed', Main.onClose);
   }
 

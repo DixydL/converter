@@ -4,7 +4,7 @@
   "description": "A minimal Electron application",
   "main": "dist/app.js",
   "scripts": {
-    "build": "./node_modules/.bin/tsc",
+    "build": "tsc",
     "start": "electron ./dist/app.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
@@ -48,15 +48,21 @@
       "./dist/index_A.html",
       "./dist/index_B.html",
       "./src/*.js"
-    ]
+    ],
+    "directories": {
+      "output": "releases",
+      "buildResources": "dist"
+    }
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@types/string-similarity": "^4.0.0",
     "cloudconvert": "^2.3.0",
     "concurrently": "^7.3.0",
     "electron-reload": "^2.0.0-alpha.1",
     "fluent-ffmpeg": "^2.1.2",
     "nodemon": "^2.0.19",
+    "progress": "^2.0.3",
     "string-similarity": "^4.0.4"
   }
 }

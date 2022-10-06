@@ -37,3 +37,8 @@ window.api.handle('finish', (event, data) => function (event, data) {
     document.getElementById('status').textContent = "Завершено: " + data;
     console.log()
 }, event);
+
+window.api.handle('progress', (event, data) => function (event, data) {
+    document.getElementById('status').textContent = data;
+    console.log()
+}, event);

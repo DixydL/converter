@@ -25,6 +25,21 @@ process.once('loaded', () => {
       let video = document.getElementById('video').textContent;
       let sound = document.getElementById('sound').textContent;
       let sub = document.getElementById('sub').textContent;
+      let chbox = document.getElementById('subBox');
+      let soundBox = document.getElementById('soundBox');
+
+      //@ts-ignore
+      if (!chbox.checked) {
+        sub = null;
+      }
+
+      //@ts-ignore
+      if (!soundBox.checked) {
+        sound = null;
+      }
+      //@ts-ignore
+      console.log(chbox.checked);
+
       ipcRenderer.send('converter', { video, sound, sub })
     }
   })

@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath.replace('app.asar', 'app.asar.unpacked'));
 
 const logger = console;
 
@@ -8,6 +10,12 @@ const options = {
   timeout: 600000, // seconds
   logger,
 };
+
+
+//@ts-ignore
+String.prototype.replaceAll = function (str1, str2, ignore) {
+  return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g, "\\$&"), (ignore ? "gi" : "g")), (typeof (str2) == "string") ? str2.replace(/\$/g, "$$$$") : str2);
+}
 
 
 class Finder {
@@ -35,11 +43,16 @@ class Finder {
       fs.mkdirSync(`./merged`);
     }
 
-    const filePath = `./merged/${path.basename(fileInput)}`;
+    const finder = new Finder();
+
+    const filePath = `./merged/${finder.trim(path.basename(fileInput)).replace(" ", "")}`;
+    //@ts-ignore
+    //soundInput = `${soundInput.replace(" ", "%20").replaceAll("\\", "\\\\")}`);
     return await new Promise((resolve, reject) => {
       ffmpeg(fs.createReadStream(fileInput), options)
         .output(filePath, { end: true })
-        .addOptions(["-i " + `${soundInput.replace(" ", "%20")}`, "-c:v copy", "-c:a aac", "-map 0:v:0", "-map 1:a:0"])
+        .addInput(soundInput)
+        .addOptions(["-c:v copy", "-c:a aac", "-map 0:v:0", "-map 1:a:0"])
         .on('end', () => {
           console.log('Finished processing'), resolve(filePath);
         })

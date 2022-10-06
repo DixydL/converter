@@ -61,7 +61,7 @@
     "concurrently": "^7.3.0",
     "electron-reload": "^2.0.0-alpha.1",
     "fluent-ffmpeg": "^2.1.2",
-    "nodemon": "^2.0.19",
+    "nodemon": "^2.0.20",
     "progress": "^2.0.3",
     "string-similarity": "^4.0.4"
   }
